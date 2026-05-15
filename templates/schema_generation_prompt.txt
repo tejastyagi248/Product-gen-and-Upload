@@ -1,0 +1,244 @@
+You are generating structured product data for a grocery e-commerce catalog.
+
+The output will be used to automatically populate product pages for a grocery website. Accuracy and consistency are important.
+
+You must follow all schema rules and return ONLY valid JSON.
+
+--------------------------------------------------
+
+PRODUCT INFORMATION
+
+product_name: {product_name}
+collection: {collection}
+
+STORE INFORMATION
+
+company_name: {company_name}
+company_city: {company_city}
+company_state: {company_state}
+company_type: {company_type}
+
+--------------------------------------------------
+
+SCHEMA RULES
+
+unit_description
+8–12 words.
+Describe how the product is sold in a concise, factual way.
+
+summary
+30–35 words.
+Short overview explaining what the product is.
+
+description
+Approximately 60 words.
+More detailed description of the product and how it is typically used.
+
+ingredients
+If this is clearly a packaged food product, list ingredients if commonly known.
+If ingredients cannot be determined or if the product is a fresh food item, use exactly this text:
+
+"Please refer to the product packaging for ingredient and allergen information. Contact the store if additional information is needed."
+
+meta_title
+SEO product title.
+Must include the product name and company_name.
+
+meta_description
+80–110 characters.
+Must include company_name and company_city.
+
+--------------------------------------------------
+
+NORMALIZATION INTELLIGENCE (CRITICAL)
+
+You must normalize brand names and product terms into their most widely recognized retail form.
+
+RULES:
+
+• Do NOT invent or assume a brand name
+• Only normalize when confidence is high
+• Expand obvious abbreviations and misspellings
+• If uncertain → keep original form
+
+EXAMPLES:
+
+pills → pillsbury (ONLY if context clearly indicates dough/biscuits brand)
+pillsburry → pillsbury
+coffemate → coffee mate
+redbull → red bull
+cocacola → coca cola
+lay s → lays
+
+If a term is ambiguous (example: "pills") and context does NOT clearly indicate a brand → DO NOT expand.
+
+--------------------------------------------------
+
+normalized_name
+
+Generate a clean, retail-standard product name.
+
+RULES:
+• Normalize brand names if confidently identifiable
+• Expand abbreviations and shorthand
+• Include brand + product + variant + size (if present)
+• Do NOT hallucinate missing attributes
+• Prioritize clarity and retail-standard naming
+
+EXAMPLES:
+
+Input: coffemate 16oz
+Output: coffee mate creamer 16 oz
+
+Input: pills crescent dough
+Output: pillsbury crescent dough
+
+Input: chicken breast
+Output: chicken breast raw
+
+--------------------------------------------------
+
+image_keyword
+This is extremely important.
+
+The keyword must describe what a real product photo would show.
+
+PRIMARY OBJECTIVE:
+Generate a highly accurate, visually descriptive search query suitable for product image retrieval.
+
+----------------------------------------
+
+STRICT RULES (NO HALLUCINATION):
+
+• Do NOT invent or assume a brand name
+• Only include a brand if it is clearly present in product_name
+• If brand is unclear or missing → DO NOT include one
+• Do NOT guess flavors, variants, or sizes unless explicitly present or strongly implied
+• Do NOT add marketing terms (premium, best, fresh, etc.)
+
+----------------------------------------
+
+SMART NORMALIZATION RULES:
+
+You MUST intelligently expand shorthand or messy inputs when confidence is high.
+
+Examples:
+• "lays" → "lays"
+• "lay s" → "lays"
+• "lay's" → "lays"
+• "l or" → "loreal"
+• "redbull" → "red bull"
+
+Only expand when it is clearly recognizable.
+If uncertain → keep original form.
+
+----------------------------------------
+
+STRUCTURE RULES:
+
+Construct the keyword using this structure:
+
+[brand if present] + [product type] + [form/packaging] + [variant/flavor if present] + [size if useful]
+
+----------------------------------------
+
+COMPONENT DEFINITIONS:
+
+• product type → what the item is (chips, butter, chicken, soda)
+• form/packaging → how it appears visually (packet, bottle, can, raw cut, bunch, box)
+• variant/flavor → only if explicitly present (cream onion, diet, boneless)
+• size → optional, include only if it helps visual identification
+
+----------------------------------------
+
+CATEGORY-SENSITIVE BEHAVIOR:
+
+1. PACKAGED PRODUCTS:
+• Include brand if present
+• Include packaging type
+• Include variant if present
+
+Example:
+Input: "Lay's Cream & Onion Chips 52g"
+Output: "lays potato chips packet cream onion"
+
+2. FRESH / GENERIC PRODUCTS:
+• Do NOT include brand
+• Focus on physical appearance
+• Use terms like raw, fresh, whole, cut
+
+Example:
+Input: "Chicken Breast Boneless"
+Output: "raw chicken breast boneless"
+
+Input: "Tomato"
+Output: "fresh red tomatoes"
+
+----------------------------------------
+
+AVOID GENERIC OUTPUTS:
+
+BAD:
+chips
+snack
+drink
+meat
+
+GOOD:
+potato chips packet
+chicken breast raw
+cola soft drink can
+
+----------------------------------------
+
+FINAL OUTPUT REQUIREMENT:
+
+• Output must be concise, specific, and usually 4–8 words unless more detail is necessary
+• Must represent a real searchable product image query
+• Must NOT contain hallucinated information
+
+--------------------------------------------------
+
+tags
+
+Generate 4–6 relevant keywords describing the product.
+
+RULES:
+• Include brand ONLY if present in product_name
+• Include product type, variant, and category terms
+• Do NOT hallucinate missing attributes
+• Keep tags factual and search-relevant
+
+Example:
+lays potato chips cream onion, potato chips, snacks, chips packet
+
+For fresh:
+chicken breast, raw chicken, poultry, boneless chicken
+
+--------------------------------------------------
+
+OUTPUT FORMAT
+
+Return ONLY valid JSON in the exact structure below.
+
+{{
+  "unit_description": "",
+  "summary": "",
+  "description": "",
+  "ingredients": "",
+  "meta_title": "",
+  "meta_description": "",
+  "normalized_name": "",
+  "image_keyword": "",
+  "tags": ""
+}}
+
+--------------------------------------------------
+
+IMPORTANT RULES
+
+Return JSON only.
+Do not include explanations.
+Do not include markdown.
+Do not add extra fields.
+Do not add commentary.

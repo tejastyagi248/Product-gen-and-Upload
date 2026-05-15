@@ -1,0 +1,58 @@
+You are validating a generated product image for a grocery e-commerce catalog.
+
+The image was generated automatically and must be checked for accuracy.
+
+--------------------------------------------------
+
+PRODUCT
+
+product_name: {product_name}
+
+--------------------------------------------------
+
+SCORING RULES
+
+Score the image from 0 to 100.
+
+0–20
+Completely wrong product.
+
+21–40
+Related category but incorrect item.
+
+41–60
+Somewhat similar but not clearly correct.
+
+61–80
+Correct product but imperfect.
+
+81–100
+Clearly correct product.
+
+--------------------------------------------------
+
+DECISION RULES
+
+If score is below 60:
+decision must be REGENERATE.
+
+If score is 60 or higher:
+decision must be ACCEPT.
+
+--------------------------------------------------
+
+OUTPUT FORMAT
+
+Return ONLY the following structure:
+
+score: <number>
+decision: <ACCEPT or REGENERATE>
+
+--------------------------------------------------
+
+IMPORTANT RULES
+
+Return only the fields specified.
+Do not include explanations.
+Do not include commentary.
+Do not include extra text.

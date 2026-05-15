@@ -1,0 +1,42 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments / secrets
+venv/
+.env
+
+# Logs and run states
+logs/
+*.log
+
+# Local data / large datasets
+data/
+nielsen_normalized.csv
+
+# Image library and generated images
+image_library/
+image_library.zip
+generated/
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Input/output/working files
+input/
+working/
+*.xlsx
+*.csv
+
+# Config with real client/API details
+config/company_config.json
+
+# Temp / extra folders
+temp/
+DATA FILTERING/
+WORKFLOW/
+
+# Ignore all scripts except current Script 2.2
+scripts/*
+!scripts/script2_upload_and_images_NEW_2.2_SKU_GTIN_handling.py
